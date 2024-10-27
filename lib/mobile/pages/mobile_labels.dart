@@ -120,20 +120,6 @@ class _MobileLabelsPageState extends State<MobileLabelsPage> {
                 ),
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: Row(
-            //     children: [
-            //       Expanded(
-            //         child: FilledButton(
-            //           onPressed: () =>
-            //               Navigator.pop(context, selectedLabels.join(',')),
-            //           child: const Text('Set'),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),

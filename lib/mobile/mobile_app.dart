@@ -69,6 +69,21 @@ class _MobileAppState extends State<MobileApp> {
     }
   }
 
+  Future<void> setAsArchived(String noteId, int value) async {
+    final res = await dbHelper.archiveNote(noteId, value);
+    if (res) {
+      setState(() {
+        final index = notes.indexWhere((n) => n.noteId == noteId);
+        notes[index].noteArchived = (value == 1);
+      });
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } else {
+      print('Unable to archive!');
+    }
+  }
+
   Future<void> saveLabel(Notes note, String noteLabel) async {
     final res = await dbHelper.updateNoteLabel(note.noteId, noteLabel);
     if (res) {
@@ -165,8 +180,8 @@ class _MobileAppState extends State<MobileApp> {
               padding: const EdgeInsets.all(8.0),
               child: EmptyWidget(
                   text: 'No Notes',
-                  width: MediaQuery.of(context).size.width,
-                  asset: 'images/undraw_playful_cat.svg'),
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  asset: 'images/nothing_to_do.svg'),
             )
           : PageView(
               controller: pageController,
@@ -202,7 +217,9 @@ class _MobileAppState extends State<MobileApp> {
                 ),
               ],
             ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: notes.isEmpty
+          ? FloatingActionButtonLocation.centerFloat
+          : FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () => openNote(Notes.empty(), true, false),
         child: const Icon(Symbols.add),
@@ -491,9 +508,11 @@ class _MobileAppState extends State<MobileApp> {
                         )),
                   ]),
                 ),
-                const ListTile(
+                ListTile(
                   leading: Icon(Symbols.archive),
                   title: Text('Archive'),
+                  onTap: () =>
+                      setAsArchived(note.noteId, note.noteArchived ? 0 : 1),
                 ),
                 ListTile(
                   leading: const Icon(Symbols.delete),

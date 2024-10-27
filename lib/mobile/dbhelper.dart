@@ -77,8 +77,9 @@ class DBHelper {
     Database? db = await database;
     var parsed = await db.query('notes',
         orderBy: sortBy,
-        where:
-            'note_archived = 0 ${filter.isNotEmpty ? ' AND (note_title LIKE \'%$filter%\' OR note_text LIKE \'%$filter%\' OR note_label LIKE \'%$filter%\')' : ''}');
+        where: filter.isNotEmpty
+            ? '(note_title LIKE \'%$filter%\' OR note_text LIKE \'%$filter%\' OR note_label LIKE \'%$filter%\')'
+            : null);
 
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
   }
