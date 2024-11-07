@@ -34,6 +34,12 @@ class Utility {
     }
   }
 
+  static bool isEmail(String? email) {
+    if (email!.isEmpty) return true;
+    return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9._]+@[a-zA-Z0-9\-]+\.[a-zA-Z]+")
+        .hasMatch(email);
+  }
+
   static String getInitials(String text) {
     var aText = text.trim().split(" ");
     String initials = "";

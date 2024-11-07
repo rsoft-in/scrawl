@@ -1,93 +1,197 @@
 import 'package:flutter/material.dart';
+import 'package:scrawler/helpers/constants.dart';
+import 'package:universal_platform/universal_platform.dart';
 
-import 'constants.dart';
-
-ThemeData theme() {
+ThemeData theme(BuildContext context, Color appColor) {
   return ThemeData(
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: kPrimaryColor,
-    ),
-    useMaterial3: true,
     fontFamily: 'Inter',
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: appColor,
+      dynamicSchemeVariant: DynamicSchemeVariant.content,
+    ),
+    splashFactory: NoSplash.splashFactory,
+    listTileTheme: listTileThemeData(),
+    elevatedButtonTheme: elevatedButtonThemeData(),
+    filledButtonTheme: filledButtonThemeData(),
+    outlinedButtonTheme: outlinedButtonThemeData(context),
+    textButtonTheme: textButtonThemeData(),
+    dialogTheme: dialogTheme(),
+    dropdownMenuTheme: dropdownMenuThemeData(),
+    popupMenuTheme: popupMenuThemeData(),
     inputDecorationTheme: inputDecorationTheme(),
-    appBarTheme: const AppBarTheme(centerTitle: false),
-    iconTheme: const IconThemeData(
-        color: Colors.black, fill: 0, weight: 400, opticalSize: 48),
-    filledButtonTheme: FilledButtonThemeData(
-      style: FilledButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kBorderRadius),
-        ),
-      ),
+    searchBarTheme: _searchBarThemeData(context),
+    searchViewTheme: searchViewThemeData(),
+    tabBarTheme: tabBarTheme(context),
+  );
+}
+
+ThemeData themeDark(BuildContext context, Color appColor) {
+  return ThemeData(
+    fontFamily: 'Inter',
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: appColor,
+      brightness: Brightness.dark,
+      dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kBorderRadius),
-        ),
-      ),
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kBorderRadius),
-        ),
+    splashFactory: NoSplash.splashFactory,
+    listTileTheme: listTileThemeData(),
+    elevatedButtonTheme: elevatedButtonThemeData(),
+    filledButtonTheme: filledButtonThemeData(),
+    outlinedButtonTheme: outlinedButtonThemeData(context),
+    textButtonTheme: textButtonThemeData(),
+    dialogTheme: dialogTheme(),
+    dropdownMenuTheme: dropdownMenuThemeData(),
+    popupMenuTheme: popupMenuThemeData(),
+    inputDecorationTheme: inputDecorationTheme(),
+    searchBarTheme: _searchBarThemeData(context),
+    searchViewTheme: searchViewThemeData(),
+    tabBarTheme: tabBarTheme(context),
+  );
+}
+
+// ListTile
+ListTileThemeData listTileThemeData() {
+  return ListTileThemeData(
+    dense: UniversalPlatform.isDesktopOrWeb ? true : false,
+  );
+}
+
+// ElevatedButton
+ElevatedButtonThemeData elevatedButtonThemeData() {
+  return ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kGlobalBorderRadius),
       ),
     ),
   );
 }
 
-ThemeData themeDark() {
-  return ThemeData(
-    colorScheme: ColorScheme.fromSeed(
-        seedColor: kPrimaryColor, brightness: Brightness.dark),
-    useMaterial3: true,
-    fontFamily: 'Inter',
-    scaffoldBackgroundColor: Colors.black,
-    appBarTheme:
-        const AppBarTheme(elevation: 0, backgroundColor: Colors.transparent),
-    iconTheme: const IconThemeData(
-        color: Colors.white, fill: 0, weight: 400, opticalSize: 48),
-    inputDecorationTheme: inputDecorationTheme(),
-    filledButtonTheme: FilledButtonThemeData(
-      style: FilledButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kBorderRadius),
-        ),
+// FilledButton
+FilledButtonThemeData filledButtonThemeData() {
+  return FilledButtonThemeData(
+    style: FilledButton.styleFrom(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kGlobalBorderRadius),
       ),
     ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kBorderRadius),
-          side: const BorderSide(color: Colors.black, width: 0.5),
-        ),
+  );
+}
+
+// OutlinedButton
+OutlinedButtonThemeData outlinedButtonThemeData(BuildContext context) {
+  return OutlinedButtonThemeData(
+    style: OutlinedButton.styleFrom(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kGlobalBorderRadius),
+          side:
+              BorderSide(color: Theme.of(context).colorScheme.outlineVariant)),
+    ),
+  );
+}
+
+// TextButton
+TextButtonThemeData textButtonThemeData() {
+  return TextButtonThemeData(
+    style: TextButton.styleFrom(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kGlobalBorderRadius),
       ),
     ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kBorderRadius),
-        ),
+  );
+}
+
+// DialogTheme
+DialogTheme dialogTheme() {
+  return DialogTheme(
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kGlobalBorderRadius)),
+  );
+}
+
+// DropdownMenu
+DropdownMenuThemeData dropdownMenuThemeData() {
+  return DropdownMenuThemeData(
+    inputDecorationTheme: InputDecorationTheme(
+      filled: false,
+      isDense: true,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(kGlobalBorderRadius),
       ),
     ),
+  );
+}
+
+// PopupMenu
+PopupMenuThemeData popupMenuThemeData() {
+  return PopupMenuThemeData(
+    position: PopupMenuPosition.under,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(kGlobalBorderRadius),
+    ),
+    menuPadding: const EdgeInsets.all(0),
   );
 }
 
 InputDecorationTheme inputDecorationTheme() {
   return InputDecorationTheme(
+    filled: true,
+    floatingLabelBehavior: FloatingLabelBehavior.never,
+    isDense: true,
+    hintStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+    counterStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+    labelStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+    helperStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(kBorderRadius),
-      borderSide: const BorderSide(width: 0.5),
+      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(25),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(kBorderRadius),
-      borderSide: const BorderSide(width: 0.5),
+      borderSide: const BorderSide(width: 2),
+      borderRadius: BorderRadius.circular(25),
     ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(kBorderRadius),
-      borderSide: const BorderSide(width: 0.5),
+  );
+}
+
+SearchBarThemeData _searchBarThemeData(BuildContext context) {
+  return SearchBarThemeData(
+    padding: const WidgetStatePropertyAll<EdgeInsets>(
+      EdgeInsets.symmetric(horizontal: 16.0),
     ),
-    isDense: true,
+    constraints: const BoxConstraints(maxHeight: 50, minHeight: 40),
+    shape: WidgetStatePropertyAll(
+      RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kGlobalBorderRadius)),
+    ),
+    elevation: const WidgetStatePropertyAll(0),
+    // side: WidgetStatePropertyAll(
+    //   BorderSide(
+    //     width: 1.5,
+    //     color: Theme.of(context).colorScheme.outlineVariant,
+    //   ),
+    // ),
+    // backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+  );
+}
+
+SearchViewThemeData searchViewThemeData() {
+  return SearchViewThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(kGlobalBorderRadius),
+    ),
+    side: BorderSide.none,
+  );
+}
+
+TabBarTheme tabBarTheme(BuildContext context) {
+  return TabBarTheme(
+    indicator: BoxDecoration(
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.2),
+      borderRadius: BorderRadius.circular(20),
+    ),
+    indicatorSize: TabBarIndicatorSize.tab,
+    dividerHeight: 0,
+    tabAlignment: TabAlignment.start,
   );
 }

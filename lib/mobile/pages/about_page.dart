@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:scrawler/helpers/constants.dart';
-import 'package:sqlite3/sqlite3.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});

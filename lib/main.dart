@@ -3,14 +3,15 @@ import 'package:macos_ui/macos_ui.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:scrawler/desktop/desktop_app.dart';
-import 'package:scrawler/desktop/pages/web_signin.dart';
-import 'package:scrawler/desktop/theme.dart';
+import 'package:scrawler/web/web_signin.dart';
+import 'package:scrawler/helpers/theme.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/helpers/theme_notifier.dart';
 import 'package:scrawler/mobile/mobile_app.dart';
 import 'package:scrawler/mobile/pages/about_page.dart';
 import 'package:scrawler/mobile/pages/appearance_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:window_manager/window_manager.dart';
@@ -87,7 +88,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    if (UniversalPlatform.isDesktop || UniversalPlatform.isWeb) {
+    if (UniversalPlatform.isDesktop) {
       return Consumer<ThemeNotifier>(
         builder: (context, themeNotifier, child) {
           return MaterialApp(
@@ -176,6 +177,19 @@ class _MyAppState extends State<MyApp> {
                       const Expanded(child: DesktopApp()),
                     ],
                   ),
+          );
+        },
+      );
+    } else if (UniversalPlatform.isWeb) {
+      return Consumer<ThemeNotifier>(
+        builder: (context, themeNotifier, child) {
+          return MaterialApp(
+            title: kAppName,
+            themeMode: themeNotifier.themeMode,
+            theme: theme(context, themeNotifier.selectedPrimaryColor),
+            darkTheme: themeDark(context, themeNotifier.selectedPrimaryColor),
+            debugShowCheckedModeBanner: false,
+            home: WebSignIn(),
           );
         },
       );
