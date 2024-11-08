@@ -12,7 +12,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  adaptive_breakpoints: ^0.1.1
   cupertino_icons: ^1.0.4
   file_picker: ^8.0.0+1
   flutter_expandable_fab: ^2.0.0
