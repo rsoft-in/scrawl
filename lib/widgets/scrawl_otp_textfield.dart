@@ -10,7 +10,7 @@ class ScrawlOtpTextField extends StatefulWidget {
       {super.key,
       this.onChanged,
       this.onCompleted,
-      this.length = 4,
+      this.length = 6,
       required this.otpController});
 
   @override
@@ -70,6 +70,11 @@ class ScrawlOtpTextFieldState extends State<ScrawlOtpTextField> {
           maxLength: 1,
           decoration: const InputDecoration(
             counterText: '',
+            filled: false,
+            border: OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
           ),
           onChanged: (String value) {
             if (value.isEmpty) {

@@ -8,6 +8,8 @@ import 'package:scrawler/desktop/desktop_app.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/models/users_model.dart';
+import 'package:scrawler/widgets/scrawl_otp_textfield.dart';
+import 'package:scrawler/widgets/scrawl_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/globals.dart' as globals;
@@ -28,10 +30,12 @@ class _WebSignInState extends State<WebSignIn> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
-  TextEditingController otpController = TextEditingController();
+  ScrawlOtpFieldController otpController = ScrawlOtpFieldController();
+
   List<User> users = [];
   final _signInFormKey = GlobalKey<FormState>();
   final _signUpFormKey = GlobalKey<FormState>();
+  String otp = '';
 
   Future<void> setAPIServer() async {
     try {
@@ -109,6 +113,38 @@ class _WebSignInState extends State<WebSignIn> {
     }
   }
 
+  Future<void> emailVerification(bool isNew) async {
+    try {
+      var response = await http.Client().post(
+        Uri.parse('${globals.apiServer}/verifyemail'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'fullname': isNew ? fullNameController.text : 'FORGOTPASSWORD',
+          'email': emailController.text,
+        }),
+      );
+      if (mounted) {
+        if (response.statusCode == 200) {
+          final res = response.body.split('|');
+          if (res.length == 2) {
+            showSnackBar(context, res[0]);
+            setState(() {
+              otp = res[1];
+            });
+          } else {
+            showSnackBar(context, 'Unable to verify Email');
+          }
+        } else {
+          showSnackBar(context, response.body);
+        }
+      }
+    } on Exception catch (e) {
+      if (mounted) {
+        showSnackBar(context, '$e');
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -162,7 +198,7 @@ class _WebSignInState extends State<WebSignIn> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Do not have account?'),
+              const Text('Don\'t have an account?'),
               kHSpace,
               TextButton(
                 onPressed: () => setState(() {
@@ -171,7 +207,18 @@ class _WebSignInState extends State<WebSignIn> {
                 child: const Text('Sign-Up'),
               ),
             ],
-          )
+          ),
+          kVSpace,
+          TextButton(
+            onPressed: () {
+              if (usernameController.text.isEmpty) {
+                showSnackBar(context, 'Enter your registered Email!');
+                return;
+              }
+              emailVerification(false);
+            },
+            child: const Text('Forgot password?'),
+          ),
         ],
       ),
     );
@@ -254,6 +301,7 @@ class _WebSignInState extends State<WebSignIn> {
             onPressed: () {
               if (_signUpFormKey.currentState!.validate()) {
                 // Create Account and Send OTP to Email
+                emailVerification(true);
               }
             },
             child: const Text('Submit'),
@@ -276,32 +324,48 @@ class _WebSignInState extends State<WebSignIn> {
       ),
     );
 
+    Widget otpForm = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Email Verification',
+          style: TextStyle(fontSize: 22),
+        ),
+        kVSpace,
+        Text(
+            'An OTP has been sent to your Email address. Please enter it here for verification.'),
+        ScrawlOtpTextField(otpController: otpController),
+      ],
+    );
+
     return Scaffold(
       body: Center(
         child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 300),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  kAppName,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w200,
-                  ),
+          constraints: const BoxConstraints(maxWidth: 300),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                kAppName,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w200,
                 ),
-                kVSpace,
-                isSignUpMode ? signUpForm : signInForm,
-                kVSpace,
-                Text(
-                  '© Rennovation Software 2024',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
+              ),
+              kVSpace,
+              otp.isEmpty ? (isSignUpMode ? signUpForm : signInForm) : otpForm,
+              kVSpace,
+              Text(
+                '© Rennovation Software 2024',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
                 ),
-              ],
-            )),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

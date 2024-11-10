@@ -1,37 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 class Utility {
   static void showSnackbar(BuildContext context, String message) {
-    if (UniversalPlatform.isIOS) {
-      CupertinoAlertDialog alert = CupertinoAlertDialog(
-        content: Text(message),
-        actions: <CupertinoDialogAction>[
-          CupertinoDialogAction(
-            child: const Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-
-      showCupertinoDialog(
-        context: context,
-        builder: (context) {
-          return alert;
-        },
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(message),
-        width: 320,
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-      ));
-    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      width: 320,
+      duration: const Duration(seconds: 2),
+      behavior: SnackBarBehavior.floating,
+    ));
   }
 
   static bool isEmail(String? email) {
