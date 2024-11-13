@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 ThemeData theme(BuildContext context, Color appColor) {
   return ThemeData(
-    fontFamily: 'Inter',
     colorScheme: ColorScheme.fromSeed(
       seedColor: appColor,
       dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),
+    textTheme: GoogleFonts.interTextTheme(),
     splashFactory: NoSplash.splashFactory,
     listTileTheme: listTileThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),
@@ -27,12 +28,13 @@ ThemeData theme(BuildContext context, Color appColor) {
 
 ThemeData themeDark(BuildContext context, Color appColor) {
   return ThemeData(
-    fontFamily: 'Inter',
     colorScheme: ColorScheme.fromSeed(
       seedColor: appColor,
       brightness: Brightness.dark,
       dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),
+    textTheme: GoogleFonts.interTextTheme(
+        ThemeData(brightness: Brightness.dark).textTheme),
     splashFactory: NoSplash.splashFactory,
     listTileTheme: listTileThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),

@@ -42,6 +42,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.24
   provider: ^6.1.2
   flutter_context_menu: ^0.2.0
+  google_fonts: ^6.2.1
 
 flutter_launcher_icons:
   android: "ic_launcher"

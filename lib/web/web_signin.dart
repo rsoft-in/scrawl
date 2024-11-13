@@ -35,7 +35,7 @@ class _WebSignInState extends State<WebSignIn> {
   List<User> users = [];
   final _signInFormKey = GlobalKey<FormState>();
   final _signUpFormKey = GlobalKey<FormState>();
-  String otp = '';
+  String otp = '111';
 
   Future<void> setAPIServer() async {
     try {
@@ -325,17 +325,25 @@ class _WebSignInState extends State<WebSignIn> {
     );
 
     Widget otpForm = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           'Email Verification',
-          style: TextStyle(fontSize: 22),
+          style: TextStyle(fontSize: 18),
         ),
         kVSpace,
         Text(
-            'An OTP has been sent to your Email address. Please enter it here for verification.'),
+          'An OTP has been sent to your Email address. '
+          'Please enter it here for verification.',
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 12,
+          ),
+          textAlign: TextAlign.center,
+        ),
         ScrawlOtpTextField(otpController: otpController),
+        kVSpace,
+        FilledButton(onPressed: () {}, child: Text('Submit')),
       ],
     );
 
@@ -348,10 +356,7 @@ class _WebSignInState extends State<WebSignIn> {
             children: [
               const Text(
                 kAppName,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w200,
-                ),
+                style: TextStyle(fontSize: 28),
               ),
               kVSpace,
               otp.isEmpty ? (isSignUpMode ? signUpForm : signInForm) : otpForm,
